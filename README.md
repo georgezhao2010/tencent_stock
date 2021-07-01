@@ -1,4 +1,4 @@
-# Tencent Stock
+# Tencent Stocks
 
 腾讯股票的Home Assistant插件，可以将每一只股票转为一个Sensor，State为当前价格。
 
