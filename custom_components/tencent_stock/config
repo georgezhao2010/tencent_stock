@@ -1,0 +1,9 @@
+tencent_stock:
+  time_slices:
+    - begin_time: '9:15'
+      end_time: '11:30'
+    - begin_time: '13:00'
+      end_time: '15:00'
+  stocks:
+    sh: ['000001','600029','600519']
+    sz: ['399001','399006']

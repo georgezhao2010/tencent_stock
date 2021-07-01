@@ -1,0 +1,12 @@
+{
+  "domain": "tencent_stock",
+  "name": "Tencent Stocks",
+  "version": "v0.0.2",
+  "config_flow": true,
+  "documentation": "https://github.com/georgezhao2010/tencent_stock",
+  "issue_tracker": "https://github.com/georgezhao2010/tencent_stock/issues",
+  "requirements": [],
+  "dependencies": [],
+  "iot_class": "cloud_polling",
+  "codeowners": ["@georgezhao2010"]
+}
