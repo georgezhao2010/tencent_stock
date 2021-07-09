@@ -27,9 +27,8 @@ class StockSensor(CoordinatorEntity):
                          or (stock[0:2] == "sz" and stock[2:5] == "399") else False
 
     def get_value(self, key):
-        data = self._coordinator.data.get(self._stock)
-        if data is not None:
-            return data.get(key)
+        if self._coordinator.data is not None and self._coordinator.data.get(self._stock) is not None:
+            return self._coordinator.data.get(self._stock).get(key)
         else:
             return STATE_UNKNOWN
 
