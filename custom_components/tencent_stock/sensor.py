@@ -23,8 +23,7 @@ class StockSensor(CoordinatorEntity):
         self._stock = stock
         self._unique_id = f"{DOMAIN}.stock_{stock}"
         self.entity_id = self._unique_id
-        self._is_index = True if (stock[0:2] == "sh" and stock[2:5] == "000") \
-                         or (stock[0:2] == "sz" and stock[2:5] == "399") else False
+        self._is_index = (stock[0:2] == "sh" and stock[2:5] == "000") or (stock[0:2] == "sz" and stock[2:5] == "399")
 
     def get_value(self, key):
         if self._coordinator.data is not None and self._coordinator.data.get(self._stock) is not None:
@@ -34,9 +33,13 @@ class StockSensor(CoordinatorEntity):
 
     @staticmethod
     def sign(str_val):
-        if float(str_val) != 0 and str_val[0:1] != "-":
+        if str_val != STATE_UNKNOWN and float(str_val) != 0 and str_val[0:1] != "-":
             return "+" + str_val
         return str_val
+
+    @property
+    def should_poll(self):
+        return False
 
     @property
     def name(self):
@@ -49,7 +52,11 @@ class StockSensor(CoordinatorEntity):
 
     @property
     def state(self):
-        return float(self.get_value('当前价格'))
+        _state = self.get_value('当前价格')
+        if _state != STATE_UNKNOWN:
+            return float(self.get_value('当前价格'))
+        else:
+            return _state
 
     @property
     def device_state_attributes(self) -> dict:
