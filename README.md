@@ -1,5 +1,7 @@
 # Tencent Stocks
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+
 腾讯股票的Home Assistant插件，可以将每一只股票转为一个Sensor，State为当前价格。
 
 同时可以将该只股票的其它信息显示为属性
