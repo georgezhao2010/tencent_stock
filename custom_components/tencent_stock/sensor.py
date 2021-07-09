@@ -53,10 +53,6 @@ class StockSensor(CoordinatorEntity):
         return float(self.get_value('当前价格'))
 
     @property
-    def device_id(self):
-        return self.device_id
-
-    @property
     def device_state_attributes(self) -> dict:
         ret = {
             "股票代码": self.get_value("股票代码"),

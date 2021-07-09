@@ -2,6 +2,7 @@ import logging
 import async_timeout
 import requests
 import datetime
+import asyncio
 import re
 from datetime import timedelta
 from homeassistant.helpers import discovery
@@ -88,15 +89,18 @@ class StockCorrdinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         data = self.data
         if self.in_time_slice() or self._count >= MAX_UPDATE_INTERVAL:
-            self._count = 0
-            async with async_timeout.timeout(3):
-                r = await self._hass.async_add_executor_job(
-                    requests.get,
-                    self._quest_url
-                )
-                if r.status_code == 200:
-                    data = self.format_response_data(r.text)
-                    _LOGGER.debug(f"Successful to update stock data {data}")
+            try:
+                async with async_timeout.timeout(3):
+                    r = await self._hass.async_add_executor_job(
+                        requests.get,
+                        self._quest_url
+                    )
+                    if r.status_code == 200:
+                        self._count = 0
+                        data = self.format_response_data(r.text)
+                        _LOGGER.debug(f"Successful to update stock data {data}")
+            except asyncio.TimeoutError:
+                _LOGGER.debug("Data update timed out")
         else:
             self._count = self._count + MIN_UPDATE_INTERVAL
             _LOGGER.debug(f"Now time not in slice, count = {self._count}")
