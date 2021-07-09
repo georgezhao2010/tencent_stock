@@ -1,0 +1,5 @@
+{
+    "name": "Tencent Stocks",
+    "domains": ["sensor"],
+    "render_readme": true
+}
