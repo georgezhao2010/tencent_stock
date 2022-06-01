@@ -7,17 +7,18 @@ import re
 from datetime import timedelta
 from homeassistant.helpers import discovery
 from homeassistant.core import HomeAssistant
-from.const import (DOMAIN,
-                   REPOS_API_URL,
-                   CONF_EXCHANGE,
-                   CONF_STOCK,
-                   MIN_UPDATE_INTERVAL,
-                   MAX_UPDATE_INTERVAL,
-                   TIME_SLICES)
+from .const import (DOMAIN,
+                    REPOS_API_URL,
+                    CONF_EXCHANGE,
+                    CONF_STOCK,
+                    MIN_UPDATE_INTERVAL,
+                    MAX_UPDATE_INTERVAL,
+                    TIME_SLICES)
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-
 _LOGGER = logging.getLogger(__name__)
+
+UPDATE_INTERVAL = timedelta(seconds=MIN_UPDATE_INTERVAL)
 
 
 async def async_setup(hass: HomeAssistant, hass_config: dict):
@@ -27,10 +28,7 @@ async def async_setup(hass: HomeAssistant, hass_config: dict):
     await coordinator.async_refresh()
     hass.async_create_task(discovery.async_load_platform(
         hass, "sensor", DOMAIN, config, hass_config))
-
     return True
-
-UPDATE_INTERVAL = timedelta(seconds=MIN_UPDATE_INTERVAL)
 
 
 class StockCorrdinator(DataUpdateCoordinator):
@@ -97,7 +95,18 @@ class StockCorrdinator(DataUpdateCoordinator):
                     )
                     if r.status_code == 200:
                         self._count = 0
-                        data = self.format_response_data(r.text)
+                        if r.text.find('*') >= 0:
+                            _has_st = True
+                            _text = r.text.replace('*', 'HHH')
+                        else:
+                            _has_st = False
+                            _text = r.text
+                        data = self.format_response_data(_text)
+                        if _has_st:
+                            for s_stock in data.values():
+                                name = s_stock.get('name')
+                                if name.find('HHH') >= 0:
+                                    s_stock['name'] = name.replace('HHH', '*')
                         _LOGGER.debug(f"Successful to update stock data {data}")
             except asyncio.TimeoutError:
                 _LOGGER.debug("Data update timed out")

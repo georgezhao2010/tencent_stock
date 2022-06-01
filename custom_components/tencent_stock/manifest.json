@@ -1,7 +1,7 @@
 {
   "domain": "tencent_stock",
   "name": "Tencent Stocks",
-  "version": "v0.0.4",
+  "version": "v0.0.5",
   "config_flow": false,
   "documentation": "https://github.com/georgezhao2010/tencent_stock",
   "issue_tracker": "https://github.com/georgezhao2010/tencent_stock/issues",

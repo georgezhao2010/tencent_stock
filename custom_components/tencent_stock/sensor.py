@@ -59,7 +59,7 @@ class StockSensor(CoordinatorEntity):
             return _state
 
     @property
-    def device_state_attributes(self) -> dict:
+    def extra_state_attributes(self) -> dict:
         ret = {
             "股票代码": self.get_value("股票代码"),
             "当前价格": self.get_value("当前价格"),
